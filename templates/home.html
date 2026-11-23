@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Roster</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="shell">
+    <header class="top">
+      <a class="brand" href="/">
+        <span class="mark">Rs</span>
+        <span><strong>Roster</strong><em>Club list, pasted in</em></span>
+      </a>
+    </header>
+    <main>
+      <section class="hero">
+        <h1>Paste the list. See the names.</h1>
+        <p class="lede">A YAML list of name and role. Roster reads it and shows the board. No account.</p>
+      </section>
+      <form method="post" action="/" class="stack">
+        <label><span>Roster</span><textarea name="roster" rows="8" required placeholder="- name: Maya Chen&#10;  role: shop"></textarea></label>
+        <button type="submit">Load</button>
+      </form>
+      {% if error %}<p class="flash">{{ error }}</p>{% endif %}
+      {% if members %}
+        <h2 class="section">Loaded</h2>
+        <table>
+          <thead><tr><th>Name</th><th>Role</th></tr></thead>
+          <tbody>
+            {% for person in members %}
+              <tr>
+                <td>{{ person.name if person is mapping else person }}</td>
+                <td>{{ person.role if person is mapping else "" }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% endif %}
+      {% if raw is not none %}
+        <h2 class="section">Loaded</h2>
+        <pre>{{ raw }}</pre>
+      {% endif %}
+      <h2 class="section">Last semester</h2>
+      <table>
+        <thead><tr><th>Name</th><th>Role</th></tr></thead>
+        <tbody>
+          {% for person in examples %}
+            <tr><td>{{ person.name }}</td><td>{{ person.role }}</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </main>
+    <footer>Roster is unofficial. It only reads what you paste.</footer>
+  </div>
+</body>
+</html>

@@ -1,0 +1,9 @@
+services:
+  web:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: "3000"
+      SECRET_KEY: ${SECRET_KEY:-roster-dev-secret}
+    restart: unless-stopped
