@@ -31,16 +31,12 @@
           <tbody>
             {% for person in members %}
               <tr>
-                <td>{{ person.name if person is mapping else person }}</td>
-                <td>{{ person.role if person is mapping else "" }}</td>
+                <td>{{ person.name }}</td>
+                <td>{{ person.role }}</td>
               </tr>
             {% endfor %}
           </tbody>
         </table>
-      {% endif %}
-      {% if raw is not none %}
-        <h2 class="section">Loaded</h2>
-        <pre>{{ raw }}</pre>
       {% endif %}
       <h2 class="section">Last semester</h2>
       <table>

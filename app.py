@@ -20,7 +20,7 @@ def health():
 
 @app.get("/")
 def home():
-    return render_template("home.html", examples=EXAMPLES, members=None, error=None, raw=None)
+    return render_template("home.html", examples=EXAMPLES, members=None, error=None)
 
 
 @app.post("/")
@@ -32,26 +32,35 @@ def load():
             examples=EXAMPLES,
             members=None,
             error="Paste a roster.",
-            raw=None,
         ), 400
     try:
-        loaded = yaml.load(body, Loader=yaml.Loader)
-    except Exception:
+        loaded = yaml.safe_load(body)
+    except yaml.YAMLError:
         return render_template(
             "home.html",
             examples=EXAMPLES,
             members=None,
             error="That roster could not be read.",
-            raw=None,
         ), 400
-    members = loaded if isinstance(loaded, list) else None
-    raw = None if members is not None else loaded
+    if not isinstance(loaded, list) or not loaded or any(
+        not isinstance(person, dict)
+        or not isinstance(person.get("name"), str)
+        or not person["name"].strip()
+        or not isinstance(person.get("role"), str)
+        or not person["role"].strip()
+        for person in loaded
+    ):
+        return render_template(
+            "home.html",
+            examples=EXAMPLES,
+            members=None,
+            error="Use a YAML list where every person has a name and role.",
+        ), 400
     return render_template(
         "home.html",
         examples=EXAMPLES,
-        members=members,
+        members=loaded,
         error=None,
-        raw=raw,
     )
 
 
